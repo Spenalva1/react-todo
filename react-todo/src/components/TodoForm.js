@@ -24,7 +24,7 @@ const TodoForm = ({newTodo}) => {
 
     return (
         <form onSubmit={handleSubmit} className="flex p-4 bg-white shadow-lg rounded-lg overflow-hidden w-full relative border">
-            <label className="m-4" onClick={() => inputRef.current.focus()}>
+            <label className="cursor-pointer m-4" onClick={() => inputRef.current.focus()}>
                 <img width="30px" height="30px" className={`border rounded-full flex justify-center items-center p-3 ${formCheck ? 'bg-gradient-to-r from-checkFrom to-checkTo' : ''}`} src={checkIcon} alt="check" />
                 <input className="hidden" type="checkbox" checked={formCheck} onChange={handleFormCheckChange}></input>
             </label>
