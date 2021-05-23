@@ -15,6 +15,8 @@ export const GlobalStyles = createGlobalStyle`
     font-size: 1.8rem;
     line-height: 2;
     font-family: 'Josefin Sans', sans-serif;
+    background: hsl(0, 0%, 98%);
+    min-height: 100vh;
   }
   button {
     font-family: 'Josefin Sans', sans-serif;

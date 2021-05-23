@@ -14,6 +14,7 @@ const App = () => {
   const [todosShow, setTodosShow] = useState(todos);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [activeFilter, setActiveFilter] = useState('ALL');
+  const todosLeft = todos.filter(todo => !todo.check).length;
   const mobileDesign = windowWidth < 850;
 
   useEffect(() => {
@@ -73,8 +74,13 @@ const App = () => {
           <div>
             {todosShow.map(todo => <TodoItem key={todo.id} className="todo-list-item" todo={todo} mobileDesign={mobileDesign} deleteTodo={deleteTodo} toggleTodoCheck={toggleTodoCheck} />)}
           </div>
-          <Filter todos={todos} setActiveFilter={setActiveFilter} activeFilter={activeFilter} clearCompleted={clearCompleted} />
+          <div className="todo-footer bg-white p-8 flex justify-between items-center relative border-b">
+            <p className="text-gray-400">{todosLeft > 0 ? `${todosLeft} items left` : 'No items left'}</p>
+            <button onClick={() => clearCompleted()} className="text-gray-400 focus:outline-none hover:text-black">Clear Completed</button>
+            {!mobileDesign && <Filter className="absolute transform -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" todos={todos} setActiveFilter={setActiveFilter} activeFilter={activeFilter} clearCompleted={clearCompleted} />}
+          </div>
         </div>}
+        {mobileDesign && <Filter className="mt-16 p-4 bg-white flex justify-center border rounded-lg shadow-lg" todos={todos} setActiveFilter={setActiveFilter} activeFilter={activeFilter} clearCompleted={clearCompleted} />}
       </div>
     </div>
   );
