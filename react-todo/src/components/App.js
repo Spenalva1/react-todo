@@ -3,13 +3,14 @@ import bgDesktopLightImage from '../assets/images/bg-desktop-light.jpg';
 import bgMobileLightImage from '../assets/images/bg-mobile-light.jpg';
 import moonIcon from '../assets/images/icon-moon.svg';
 import sunIcon from '../assets/images/icon-sun.svg';
+import { useDarkMode } from '../lib/darkModeContext';
 import useLocal from '../lib/useLocal';
 import Filter from './filter';
 import TodoForm from './TodoForm';
 import TodoItem from './TodoItem';
 
 const App = () => {
-  const [darkTheme, setDarkTheme] = useState(false);  // DARK
+  const {darkMode, toggleDarkMode} = useDarkMode();
   const [todos, setTodos] = useLocal('TODOS', []);
   const [todosShow, setTodosShow] = useState(todos);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -65,8 +66,8 @@ const App = () => {
       <div className="z-10 relative container m-auto max-w-6xl px-8 py-16 box-border">
         <div className="header flex justify-between items-center pb-16">
           <h1 className="text-white font-black text-6xl tracking-widest">TODO</h1>
-          <button className="outline-none focus:outline-none" onClick={() => setDarkTheme(!darkTheme)}>
-            <img src={ darkTheme ? sunIcon : moonIcon} alt="theme toggle"></img>
+          <button className="outline-none focus:outline-none" onClick={() => toggleDarkMode()}>
+            <img src={ darkMode ? sunIcon : moonIcon} alt="theme toggle"></img>
           </button>
         </div>
         <TodoForm newTodo={newTodo} />
@@ -80,7 +81,7 @@ const App = () => {
             {!mobileDesign && <Filter className="absolute transform -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" todos={todos} setActiveFilter={setActiveFilter} activeFilter={activeFilter} clearCompleted={clearCompleted} />}
           </div>
         </div>}
-        {mobileDesign && <Filter className="mt-16 p-4 bg-white flex justify-center border rounded-lg shadow-lg" todos={todos} setActiveFilter={setActiveFilter} activeFilter={activeFilter} clearCompleted={clearCompleted} />}
+        {todos && todos.length > 0 && mobileDesign && <Filter className="mt-16 p-4 bg-white flex justify-center border rounded-lg shadow-lg" todos={todos} setActiveFilter={setActiveFilter} activeFilter={activeFilter} clearCompleted={clearCompleted} />}
       </div>
     </div>
   );

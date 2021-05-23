@@ -4,11 +4,14 @@ import './index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 import { GlobalStyles } from './GlobalStyles';
+import { DarkModeProvider } from './lib/darkModeContext';
 
 ReactDOM.render(
   <React.StrictMode>
-    <GlobalStyles></GlobalStyles>
-    <App />
+    <DarkModeProvider>
+      <GlobalStyles></GlobalStyles>
+      <App />
+    </DarkModeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
