@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import bgDesktopLightImage from '../assets/images/bg-desktop-light.jpg';
+import bgDesktopDarkImage from '../assets/images/bg-desktop-dark.jpg';
 import bgMobileLightImage from '../assets/images/bg-mobile-light.jpg';
+import bgMobileDarkImage from '../assets/images/bg-mobile-dark.jpg';
 import moonIcon from '../assets/images/icon-moon.svg';
 import sunIcon from '../assets/images/icon-sun.svg';
 import { useDarkMode } from '../lib/darkModeContext';
@@ -62,7 +64,7 @@ const App = () => {
 
   return (
     <div>
-      <img className="w-full h-auto absolute z-0" src={mobileDesign ? bgMobileLightImage : bgDesktopLightImage} alt="background" />
+      <img className="w-full h-auto absolute z-0" src={mobileDesign ? (darkMode ? bgMobileDarkImage : bgMobileLightImage) : (darkMode ? bgDesktopDarkImage : bgDesktopLightImage)} alt="background" />
       <div className="z-10 relative container m-auto max-w-6xl px-8 py-16 box-border">
         <div className="header flex justify-between items-center pb-16">
           <h1 className="text-white font-black text-6xl tracking-widest">TODO</h1>
@@ -71,17 +73,17 @@ const App = () => {
           </button>
         </div>
         <TodoForm newTodo={newTodo} />
-        {todos && todos.length > 0 && <div className="todo-list overflow-hidden shadow-lg mt-14 border rounded-lg">
+        {todos && todos.length > 0 && <div className="todo-list overflow-hidden shadow-lg mt-14 rounded-lg">
           <div>
             {todosShow.map(todo => <TodoItem key={todo.id} className="todo-list-item" todo={todo} mobileDesign={mobileDesign} deleteTodo={deleteTodo} toggleTodoCheck={toggleTodoCheck} />)}
           </div>
-          <div className="todo-footer bg-white p-8 flex justify-between items-center relative border-b">
+          <div className={`todo-footer ${darkMode ? 'bg-darkVeryDarkDesaturatedBlue' : 'bg-white'} p-8 flex justify-between items-center relative`}>
             <p className="text-gray-400">{todosLeft > 0 ? `${todosLeft} items left` : 'No items left'}</p>
             <button onClick={() => clearCompleted()} className="text-gray-400 focus:outline-none hover:text-black">Clear Completed</button>
             {!mobileDesign && <Filter className="absolute transform -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" todos={todos} setActiveFilter={setActiveFilter} activeFilter={activeFilter} clearCompleted={clearCompleted} />}
           </div>
         </div>}
-        {todos && todos.length > 0 && mobileDesign && <Filter className="mt-16 p-4 bg-white flex justify-center border rounded-lg shadow-lg" todos={todos} setActiveFilter={setActiveFilter} activeFilter={activeFilter} clearCompleted={clearCompleted} />}
+        {todos && todos.length > 0 && mobileDesign && <Filter className={`mt-16 p-4 ${darkMode ? 'bg-darkVeryDarkDesaturatedBlue' : 'bg-white'} flex justify-center rounded-lg shadow-lg`} todos={todos} setActiveFilter={setActiveFilter} activeFilter={activeFilter} clearCompleted={clearCompleted} />}
       </div>
     </div>
   );

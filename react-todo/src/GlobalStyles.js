@@ -1,6 +1,7 @@
 import { createGlobalStyle } from "styled-components";
+import { useDarkMode } from "./lib/darkModeContext";
 
-export const GlobalStyles = createGlobalStyle`
+const GlobalStyles = createGlobalStyle`
   html {
     font-size: 62.5%;
   }
@@ -15,7 +16,7 @@ export const GlobalStyles = createGlobalStyle`
     font-size: 1.8rem;
     line-height: 2;
     font-family: 'Josefin Sans', sans-serif;
-    background: hsl(0, 0%, 98%);
+    background: ${({ darkMode }) => darkMode ? 'hsl(235, 21%, 11%)' : 'hsl(0, 0%, 98%)'};
     min-height: 100vh;
   }
   button {
@@ -23,4 +24,9 @@ export const GlobalStyles = createGlobalStyle`
     cursor: pointer;
   }
 `;
+
+export const Global = () => {
+  const { darkMode } = useDarkMode();
+  return <GlobalStyles darkMode={darkMode} />;
+};
 

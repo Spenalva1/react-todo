@@ -1,12 +1,15 @@
 import styled from 'styled-components';
 import checkIcon from '../assets/images/icon-check.svg';
 import crossIcon from '../assets/images/icon-cross.svg';
+import { useDarkMode } from '../lib/darkModeContext';
+import CheckButton from './CheckButton';
 
 const TodoItem = ({todo, toggleTodoCheck, deleteTodo, mobileDesign}) => {
+    const {darkMode} = useDarkMode();
     return (
-        <TodoItemStyles className="flex items-center p-4 bg-white overflow-hidden w-full relative border-b">
-            <img onClick={() => toggleTodoCheck(todo.id)} width="30px" height="30px" className={`cursor-pointer m-4 border rounded-full flex justify-center items-center p-3 ${todo.check ? 'bg-gradient-to-r from-checkFrom to-checkTo' : ''}`} src={checkIcon} alt="check" />
-            <p className={`flex-1 px-8 ${todo.check ? 'line-through text-gray-300' : ''}`}>{todo.name}</p>
+        <TodoItemStyles className={`flex items-center p-4 ${darkMode ? 'bg-darkVeryDarkDesaturatedBlue' : 'bg-white'} overflow-hidden w-full relative border-b border-gray-50`}>
+            <CheckButton check={todo.check} toggleTodoCheck={() => toggleTodoCheck(todo.id)}/>
+            <p className={`${darkMode ? 'text-white' : 'text-black'} flex-1 px-8 ${todo.check ? 'line-through opacity-40' : ''}`}>{todo.name}</p>
             <img onClick={() => deleteTodo(todo.id)} width="30px" height="30px" className={`${!mobileDesign ? 'desktop' : ''} cursor-pointer m-4 p-3`} src={crossIcon} alt="check" />
         </TodoItemStyles>
     )
