@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import checkIcon from '../assets/images/icon-check.svg';
 import crossIcon from '../assets/images/icon-cross.svg';
 import { useDarkMode } from '../lib/darkModeContext';
 import CheckButton from './CheckButton';

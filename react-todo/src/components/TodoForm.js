@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import checkIcon from '../assets/images/icon-check.svg';
 import { useDarkMode } from "../lib/darkModeContext";
 import CheckButton from "./CheckButton";
 
