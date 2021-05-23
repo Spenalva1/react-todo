@@ -1,5 +1,4 @@
 const Filter = ({activeFilter, setActiveFilter, className}) => {
-  console.log(className);
   return (
     <div className={className}>
       <button onClick={() => setActiveFilter('ALL')} className={`${activeFilter === 'ALL' ? 'text-blue-500' : 'text-gray-400 hover:text-black'} mr-8 focus:outline-none font-bold`}>All</button>
