@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd'
 import bgDesktopLightImage from '../assets/images/bg-desktop-light.jpg';
 import bgDesktopDarkImage from '../assets/images/bg-desktop-dark.jpg';
 import bgMobileLightImage from '../assets/images/bg-mobile-light.jpg';
@@ -14,7 +15,7 @@ import TodoItem from './TodoItem';
 const App = () => {
   const {darkMode, toggleDarkMode} = useDarkMode();
   const [todos, setTodos] = useLocal('TODOS', []);
-  const [todosShow, setTodosShow] = useState(todos);
+  // const [todosShow, setTodosShow] = useState(todos);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [activeFilter, setActiveFilter] = useState('ALL');
   const todosLeft = todos.filter(todo => !todo.check).length;
@@ -30,20 +31,20 @@ const App = () => {
     }
   }, []);
 
-  useEffect(() => {
-    setTodosShow(todos.filter(todo => {
-      if (activeFilter === 'ALL') {
-        return true;
-      }
-      if (activeFilter === 'ACTIVE' && !todo.check) {
-        return true;
-      }
-      if (activeFilter === 'COMPLETED' && todo.check) {
-        return true;
-      }
-      return false;
-    }))
-  }, [todos, activeFilter])
+  // useEffect(() => {
+  //   setTodosShow(todos.filter(todo => {
+  //     if (activeFilter === 'ALL') {
+  //       return true;
+  //     }
+  //     if (activeFilter === 'ACTIVE' && !todo.check) {
+  //       return true;
+  //     }
+  //     if (activeFilter === 'COMPLETED' && todo.check) {
+  //       return true;
+  //     }
+  //     return false;
+  //   }))
+  // }, [todos, activeFilter])
 
   const newTodo = (name, check) => {
     setTodos([...todos, {name, check, id: new Date().valueOf()}])
@@ -61,6 +62,26 @@ const App = () => {
     setTodos(todos.filter(todo => !todo.check));
   }
   
+  const onDragEnd = (result) => {
+    if(!result.destination) return;
+    const items = Array.from(todos);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    setTodos(items);
+  }
+  
+  const todosShow = todos.filter(todo => {
+        if (activeFilter === 'ALL') {
+          return true;
+        }
+        if (activeFilter === 'ACTIVE' && !todo.check) {
+          return true;
+        }
+        if (activeFilter === 'COMPLETED' && todo.check) {
+          return true;
+        }
+        return false;
+    })
 
   return (
     <div>
@@ -74,9 +95,24 @@ const App = () => {
         </div>
         <TodoForm newTodo={newTodo} />
         {todos && todos.length > 0 && <div className="todo-list overflow-hidden shadow-lg mt-14 rounded-lg">
-          <div>
-            {todosShow.map(todo => <TodoItem key={todo.id} className="todo-list-item" todo={todo} mobileDesign={mobileDesign} deleteTodo={deleteTodo} toggleTodoCheck={toggleTodoCheck} />)}
-          </div>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="todos">
+              {(provided) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {todosShow.map((todo, index) => (
+                    <Draggable key={todo.id} draggableId={''+todo.id} index={index}>
+                      {(provided) => (
+                        // <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}>{todo.name}</div>
+                        // <TodoItem {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} className="todo-list-item" todo={todo} mobileDesign={mobileDesign} deleteTodo={deleteTodo} toggleTodoCheck={toggleTodoCheck} />
+                        <TodoItem provided={provided} className="todo-list-item" todo={todo} mobileDesign={mobileDesign} deleteTodo={deleteTodo} toggleTodoCheck={toggleTodoCheck} />
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
           <div className={`todo-footer ${darkMode ? 'bg-darkVeryDarkDesaturatedBlue' : 'bg-white'} p-8 flex justify-between items-center relative`}>
             <p className="text-gray-400">{todosLeft > 0 ? `${todosLeft} items left` : 'No items left'}</p>
             <button onClick={() => clearCompleted()} className="text-gray-400 focus:outline-none hover:text-black">Clear Completed</button>
